@@ -1,5 +1,6 @@
 package sk.malajter;
 
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -14,8 +15,11 @@ public class Main {
         final Hero hero = new Hero(name);
         System.out.println("Hello " + hero.getName() + " . Let's start the game!");
 
-
-
+        System.out.println("Your abilities: ");
+        for (Map.Entry<Ability, Integer> entry: hero.getAbilities().entrySet()) {
+            System.out.print(entry.getKey() + ": " + entry.getValue() + ", ");
+        }
+        System.out.println();
 
     }
 }
