@@ -31,4 +31,15 @@ public class Hero {
                 Ability.HEALTH, 50
         ));
     }
+
+    public void printAbilities() {
+        int index = 1;
+        System.out.println("0. Explain abilities");
+        for (Map.Entry<Ability, Integer> entry : getAbilities().entrySet()) {
+            String abilityName = entry.getKey().toString();
+            String formattedName = abilityName.substring(0, 1).toUpperCase() + abilityName.substring(1).toLowerCase();
+            System.out.println(index + ". " + formattedName);
+            index++;
+        }
+    }
 }
