@@ -6,10 +6,12 @@ import java.util.Map;
 public class Hero {
     private String name;
     private Map<Ability, Integer> abilities;
+    private int heroAvailablePoints;
 
     public Hero(String name) {
         this.name = name;
         this.abilities = this.geInitialAbilities();
+        this.heroAvailablePoints = 7;
     }
 
     public String getName() {
@@ -18,6 +20,22 @@ public class Hero {
 
     public Map<Ability, Integer> getAbilities() {
         return abilities;
+    }
+
+    public int getHeroAvailablePoints() {
+        return heroAvailablePoints;
+    }
+
+    public void updateAbility(Ability ability, int delta) {
+        if (ability.equals(Ability.HEALTH)) {
+            this.abilities.put(ability, this.abilities.get(ability) + delta * 5);
+        } else {
+            this.abilities.put(ability, this.abilities.get(ability) + delta);
+        }
+    }
+
+    public void updateAvailablePoints(int delta) {
+        this.heroAvailablePoints += delta;
     }
 
     // method for creating hashMap of Abilities and their values
@@ -30,16 +48,5 @@ public class Hero {
                 Ability.LUCK, 1,
                 Ability.HEALTH, 50
         ));
-    }
-
-    public void printAbilities() {
-        int index = 1;
-        System.out.println("0. Explain abilities");
-        for (Map.Entry<Ability, Integer> entry : getAbilities().entrySet()) {
-            String abilityName = entry.getKey().toString();
-            String formattedName = abilityName.substring(0, 1).toUpperCase() + abilityName.substring(1).toLowerCase();
-            System.out.println(index + ". " + formattedName);
-            index++;
-        }
     }
 }
