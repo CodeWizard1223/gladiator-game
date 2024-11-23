@@ -1,7 +1,7 @@
 package sk.malajter.domain;
 
 import sk.malajter.ability.Ability;
-import sk.malajter.constant.Constant;
+import sk.malajter.constant.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ public class Hero {
     public Hero(String name) {
         this.name = name;
         this.abilities = this.geInitialAbilities();
-        this.heroAvailablePoints = Constant.INITIAL_ABILITY_POINTS;
+        this.heroAvailablePoints = Constants.INITIAL_ABILITY_POINTS;
     }
 
     public String getName() {
@@ -35,7 +35,7 @@ public class Hero {
 
     public void updateAbility(Ability ability, int delta) {
         if (ability.equals(Ability.HEALTH)) {
-            this.abilities.put(ability, this.abilities.get(ability) + delta * Constant.HEALTH_OF_ONE_POINT);
+            this.abilities.put(ability, this.abilities.get(ability) + delta * Constants.HEALTH_OF_ONE_POINT);
         } else {
             this.abilities.put(ability, this.abilities.get(ability) + delta);
         }
