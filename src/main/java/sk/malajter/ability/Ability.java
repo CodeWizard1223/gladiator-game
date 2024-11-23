@@ -1,4 +1,4 @@
-package sk.malajter;
+package sk.malajter.ability;
 
 public enum Ability {
 

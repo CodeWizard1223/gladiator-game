@@ -1,4 +1,4 @@
-package sk.malajter;
+package sk.malajter.utility;
 
 import java.util.Scanner;
 
