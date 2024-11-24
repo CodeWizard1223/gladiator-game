@@ -41,11 +41,11 @@ public class Hero {
         }
     }
 
-    public void updateAvailablePoints(int delta) {
+    public void updateHeroAvailablePoints(int delta) {
         this.heroAvailablePoints += delta;
     }
 
-    // method for creating hashMap of Abilities and their values
+    // Method for creating hashMap of Abilities and their values.
     private Map<Ability, Integer> geInitialAbilities() {
         return new HashMap<>(Map.of(
               Ability.ATTACK, 1,
