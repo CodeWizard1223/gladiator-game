@@ -14,12 +14,15 @@ public class GameManager {
 
     private int currentLevel;
 
+    private final FileService fileService;
+
     public GameManager() {
         this.hero = new Hero("");
         // An option to start game in Main is put the startGame method to constructor of GameManager:
         //startGame();
         this.heroAbilityManager = new HeroAbilityManager(this.hero);
         this.currentLevel = Constants.INITIAL_LEVEL;
+        this.fileService = new FileService();
     }
 
     public void startGame() {
@@ -40,7 +43,7 @@ public class GameManager {
                     this.upgradeAbilities();
                 }
                 case 2 -> {
-                    // TODO save game
+                    this.fileService.saveGame(this.hero, this.currentLevel);
                 }
                 case 3 -> {
                     System.out.println("Are you sure?");
