@@ -8,13 +8,21 @@ import java.util.Map;
 
 public class Hero {
     private String name;
+
     private Map<Ability, Integer> abilities;
+
     private int heroAvailablePoints;
 
     public Hero(String name) {
         this.name = name;
         this.abilities = this.geInitialAbilities();
         this.heroAvailablePoints = Constants.INITIAL_ABILITY_POINTS;
+    }
+
+    public Hero(String name, Map<Ability, Integer> abilities, int heroAvailablePoints) {
+        this.name = name;
+        this.abilities = abilities;
+        this.heroAvailablePoints = heroAvailablePoints;
     }
 
     public String getName() {
