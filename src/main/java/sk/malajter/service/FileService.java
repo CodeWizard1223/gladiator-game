@@ -25,7 +25,7 @@ public class FileService {
 
             System.out.println("Enter name of save you want to load:");
             for (int i = 0; i < savedFiles.length; i++) {
-                System.out.println(i + "." + savedFiles[i].getName().replace(".txt", ""));
+                System.out.println(i + ". " + savedFiles[i].getName().replace(".txt", ""));
             }
 
             final int choice = InputUtils.readInt();
@@ -65,7 +65,6 @@ public class FileService {
     }
 
     public void saveGame(Hero hero, int currentLevel) {
-
         while (true) {
             System.out.println("How do you want to name your save?");
             final String name = InputUtils.readString();

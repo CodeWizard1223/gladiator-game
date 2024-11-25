@@ -86,6 +86,7 @@ public class GameManager {
 
         System.out.println("0. Start new game.");
         System.out.println("1. Load game.");
+
         final int choice = InputUtils.readInt();
         switch (choice) {
             case 0 -> {

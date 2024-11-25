@@ -6,35 +6,23 @@ import sk.malajter.constant.Constants;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Hero {
-    private String name;
-
-    private Map<Ability, Integer> abilities;
+public class Hero extends GameCharacter {
 
     private int heroAvailablePoints;
 
     public Hero(String name) {
-        this.name = name;
+        super(name, new HashMap<>());
         this.abilities = this.geInitialAbilities();
         this.heroAvailablePoints = Constants.INITIAL_ABILITY_POINTS;
     }
 
     public Hero(String name, Map<Ability, Integer> abilities, int heroAvailablePoints) {
-        this.name = name;
-        this.abilities = abilities;
+        super(name, abilities);
         this.heroAvailablePoints = heroAvailablePoints;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Map<Ability, Integer> getAbilities() {
-        return abilities;
     }
 
     public int getHeroAvailablePoints() {
