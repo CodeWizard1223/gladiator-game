@@ -41,6 +41,10 @@ public class Hero extends GameCharacter {
         this.heroAvailablePoints += delta;
     }
 
+    public void setAbility(Ability ability, int value) {
+        abilities.put(ability, value);
+    }
+
     // Method for creating hashMap of Abilities and their values.
     private Map<Ability, Integer> geInitialAbilities() {
         return new HashMap<>(Map.of(

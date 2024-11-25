@@ -1,5 +1,6 @@
 package sk.malajter.service;
 
+import sk.malajter.ability.Ability;
 import sk.malajter.ability.HeroAbilityManager;
 import sk.malajter.constant.Constants;
 import sk.malajter.domain.Enemy;
@@ -36,7 +37,7 @@ public class GameManager {
         this.enemiesByLevel = EnemyGenerator.createEnemies();
     }
 
-    public void startGame() {
+    public void startGame() throws InterruptedException {
         this.initGame();
 
         while (this.currentLevel <= this.enemiesByLevel.size()) {
@@ -50,8 +51,22 @@ public class GameManager {
             switch (choice) {
                 case 0 -> {
                     if (this.battleService.isHeroReadyToBattle(this.hero, enemy)) {
-                        // TODO battle
-                        this.currentLevel++;
+                        final int heroHealthBeforeBattle = this.hero.getAbilities().get(Ability.HEALTH);
+
+                        final boolean hasHeroWon = this.battleService.battle(this.hero, enemy);
+                        if (hasHeroWon) {
+                            PrintUtils.printDivider();
+                            System.out.println("You have won this battle! You have gained " + this.currentLevel + " ability points.");
+                            this.hero.updateHeroAvailablePoints(this.currentLevel);
+                            this.currentLevel++;
+                        } else {
+                            System.out.println("You have lost.");
+                        }
+
+                        // restore health
+                        this.hero.setAbility(Ability.HEALTH, heroHealthBeforeBattle);
+                        System.out.println("You have full health now.");
+                        PrintUtils.printDivider();
                     }
                 }
                 case 1 -> {
