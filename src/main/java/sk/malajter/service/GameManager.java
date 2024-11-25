@@ -2,10 +2,14 @@ package sk.malajter.service;
 
 import sk.malajter.ability.HeroAbilityManager;
 import sk.malajter.constant.Constants;
+import sk.malajter.domain.Enemy;
 import sk.malajter.domain.Hero;
 import sk.malajter.domain.LoadedGame;
+import sk.malajter.utility.EnemyGenerator;
 import sk.malajter.utility.InputUtils;
 import sk.malajter.utility.PrintUtils;
+
+import java.util.Map;
 
 public class GameManager {
 
@@ -17,6 +21,10 @@ public class GameManager {
 
     private final FileService fileService;
 
+    private final BattleService battleService;
+
+    private final Map<Integer, Enemy> enemiesByLevel;
+
     public GameManager() {
         this.hero = new Hero("");
         // An option to start game in Main is put the startGame method to constructor of GameManager:
@@ -24,13 +32,16 @@ public class GameManager {
         this.heroAbilityManager = new HeroAbilityManager(this.hero);
         this.currentLevel = Constants.INITIAL_LEVEL;
         this.fileService = new FileService();
+        this.battleService = new BattleService();
+        this.enemiesByLevel = EnemyGenerator.createEnemies();
     }
 
     public void startGame() {
         this.initGame();
 
-        while (currentLevel <= 5) {
-            System.out.println("0. Fight " + "Level " + this.currentLevel);
+        while (this.currentLevel <= this.enemiesByLevel.size()) {
+            final Enemy enemy = this.enemiesByLevel.get(this.currentLevel);
+            System.out.println("0. Fight " + enemy.getName() + " (Level " + this.currentLevel + ")");
             System.out.println("1. Upgrade abilities (" + hero.getHeroAvailablePoints() + " points to spend.)");
             System.out.println("2. Save game.");
             System.out.println("3. Exit game.");
@@ -38,7 +49,10 @@ public class GameManager {
             final int choice = InputUtils.readInt();
             switch (choice) {
                 case 0 -> {
-                    this.currentLevel++;
+                    if (this.battleService.isHeroReadyToBattle(this.hero, enemy)) {
+                        // TODO battle
+                        this.currentLevel++;
+                    }
                 }
                 case 1 -> {
                     this.upgradeAbilities();
