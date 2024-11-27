@@ -23,7 +23,7 @@ public abstract class GameCharacter {
         return abilities;
     }
 
-    public void receiveDamage(int damage) {
-        abilities.put(PlantAbility.HEALTH, Math.max(0, abilities.get(PlantAbility.HEALTH) - damage));
-    }
+//    public void receiveDamage(int damage) {
+//        abilities.put(PlantAbility.HEALTH, Math.max(0, abilities.get(PlantAbility.HEALTH) - damage));
+//    }
 }
