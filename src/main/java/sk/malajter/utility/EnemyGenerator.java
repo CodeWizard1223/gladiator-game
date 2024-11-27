@@ -1,64 +1,69 @@
 package sk.malajter.utility;
 
-import sk.malajter.ability.Ability;
-import sk.malajter.domain.Enemy;
+import sk.malajter.ability.PlantAbility;
+import sk.malajter.ability.ZombieAbility;
+import sk.malajter.domain.Zombie;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class EnemyGenerator {
 
-    public static Map<Integer, Enemy> createEnemies() {
-        Map<Integer, Enemy> enemies = new HashMap<>();
+    public static Map<Integer, Zombie> createEnemies() {
+        Map<Integer, Zombie> enemies = new HashMap<>();
         enemies.put(
-                1, new Enemy("Goblin", new HashMap<>(Map.of(
-                        Ability.ATTACK, 3,
-                        Ability.DEFENCE, 1,
-                        Ability.DEXTERITY, 2,
-                        Ability.SKILL, 2,
-                        Ability.LUCK, 4,
-                        Ability.HEALTH, 30
-                )))
+                1, new Zombie("Regular Zombie", Map.of(
+                        ZombieAbility.STRENGTH, 3,
+                        ZombieAbility.ARMOR, 1
+                ))
         );
         enemies.put(
-                2, new Enemy("Orc", new HashMap<>(Map.of(
-                        Ability.ATTACK, 3,
-                        Ability.DEFENCE, 1,
-                        Ability.DEXTERITY, 4,
-                        Ability.SKILL, 3,
-                        Ability.LUCK, 1,
-                        Ability.HEALTH, 35
-                )))
+                2, new Zombie("Conehead Zombie", Map.of(
+                        ZombieAbility.STRENGTH, 3,
+                        ZombieAbility.ARMOR, 2
+                ))
         );
         enemies.put(
-                3, new Enemy("Golem", new HashMap<>(Map.of(
-                        Ability.ATTACK, 4,
-                        Ability.DEFENCE, 4,
-                        Ability.DEXTERITY, 1,
-                        Ability.SKILL, 2,
-                        Ability.LUCK, 5,
-                        Ability.HEALTH, 50
-                )))
+                3, new Zombie("Buckethead Zombie", Map.of(
+                        ZombieAbility.STRENGTH, 4,
+                        ZombieAbility.ARMOR, 4
+                ))
         );
         enemies.put(
-                4, new Enemy("Troll", new HashMap<>(Map.of(
-                        Ability.ATTACK, 5,
-                        Ability.DEFENCE, 5,
-                        Ability.DEXTERITY, 1,
-                        Ability.SKILL, 1,
-                        Ability.LUCK, 1,
-                        Ability.HEALTH, 60
-                )))
+                4, new Zombie("Pole Vaulting Zombie", Map.of(
+                        ZombieAbility.STRENGTH, 5,
+                        ZombieAbility.ARMOR, 1,
+                        ZombieAbility.CHARGE, 2
+                ))
         );
         enemies.put(
-                5, new Enemy("Dragon", new HashMap<>(Map.of(
-                        Ability.ATTACK, 5,
-                        Ability.DEFENCE, 5,
-                        Ability.DEXTERITY, 5,
-                        Ability.SKILL, 5,
-                        Ability.LUCK, 5,
-                        Ability.HEALTH, 60
-                )))
+                5, new Zombie("Football Zombie", Map.of(
+                        ZombieAbility.STRENGTH, 5,
+                        ZombieAbility.ARMOR, 3,
+                        ZombieAbility.CHARGE, 3
+                ))
+        );
+        enemies.put(
+                6, new Zombie("Dancing Zombie", Map.of(
+                        ZombieAbility.STRENGTH, 3,
+                        ZombieAbility.ARMOR, 1,
+                        ZombieAbility.CHARGE, 2
+                ))
+        );
+        enemies.put(
+                7, new Zombie("Zomboni", Map.of(
+                        ZombieAbility.STRENGTH, 7,
+                        ZombieAbility.ARMOR, 5,
+                        ZombieAbility.CHARGE, 1,
+                        ZombieAbility.AREA_ATTACK, 10
+                ))
+        );
+        enemies.put(
+                8, new Zombie("Gargantuar", Map.of(
+                        ZombieAbility.STRENGTH, 10,
+                        ZombieAbility.ARMOR, 7,
+                        ZombieAbility.AREA_ATTACK, 10
+                ))
         );
         return enemies;
     }

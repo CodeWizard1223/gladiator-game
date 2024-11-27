@@ -1,7 +1,7 @@
 package sk.malajter.service;
 
-import sk.malajter.ability.Ability;
-import sk.malajter.domain.Hero;
+import sk.malajter.ability.PlantAbility;
+import sk.malajter.domain.Plant;
 import sk.malajter.domain.LoadedGame;
 import sk.malajter.utility.InputUtils;
 
@@ -42,7 +42,7 @@ public class FileService {
                 System.out.println("Game loaded.");
                 return this.stringHeroData(heroData);
             } catch (IOException e) {
-                System.out.println("Error while saving game.");
+                System.out.println("Error while load game.");
             } catch (InvalidPathException e) {
                 System.out.println("Invalid characters in file name.");
             }
@@ -54,17 +54,17 @@ public class FileService {
         final int currentLevel = Integer.parseInt(lines[0]);
         final String heroName = lines[1];
         final int heroAvailablePoints = Integer.parseInt(lines[2]);
-        final Map<Ability, Integer> abilities = new HashMap<>();
-        for (int i = 3; i < 3 + Ability.values().length; i++) {
+        final Map<PlantAbility, Integer> abilities = new HashMap<>();
+        for (int i = 3; i < 3 + PlantAbility.values().length; i++) {
             final String[] abilityData = lines[i].split(":");
-            final Ability ability = Ability.valueOf(abilityData[0]);
+            final PlantAbility plantAbility = PlantAbility.valueOf(abilityData[0]);
             final int value = Integer.parseInt(abilityData[1]);
-            abilities.put(ability, value);
+            abilities.put(plantAbility, value);
         }
-        return new LoadedGame(new Hero(heroName, abilities, heroAvailablePoints), currentLevel);
+        return new LoadedGame(new Plant(heroName, abilities, heroAvailablePoints), currentLevel);
     }
 
-    public void saveGame(Hero hero, int currentLevel) {
+    public void saveGame(Plant plant, int currentLevel) {
         while (true) {
             System.out.println("How do you want to name your save?");
             final String name = InputUtils.readString();
@@ -77,7 +77,7 @@ public class FileService {
             }
 
             try {
-                Files.writeString(Path.of(path), this.heroDataToString(hero, currentLevel));
+                Files.writeString(Path.of(path), this.heroDataToString(plant, currentLevel));
                 System.out.println("Game saved.");
             } catch (IOException e) {
                 System.out.println("Error while saving game.");
@@ -89,13 +89,13 @@ public class FileService {
             break;
         }
     }
-    private String heroDataToString(Hero hero, int currentLevel) {
+    private String heroDataToString(Plant plant, int currentLevel) {
         final StringBuilder sb = new StringBuilder();
         sb.append(currentLevel).append("\n");
-        sb.append(hero.getName()).append("\n");
-        sb.append(hero.getHeroAvailablePoints()).append("\n");
-        for (Ability ability: Ability.values()) {
-            sb.append(ability).append(":").append(hero.getAbilities().get(ability)).append("\n");
+        sb.append(plant.getName()).append("\n");
+        sb.append(plant.getHeroAvailablePoints()).append("\n");
+        for (PlantAbility plantAbility : PlantAbility.values()) {
+            sb.append(plantAbility).append(":").append(plant.getAbilities().get(plantAbility)).append("\n");
         }
         return sb.toString();
     }

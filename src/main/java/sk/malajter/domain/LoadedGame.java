@@ -2,17 +2,17 @@ package sk.malajter.domain;
 
 public class LoadedGame {
 
-    private final Hero hero;
+    private final Plant plant;
 
     private final int level;
 
-    public LoadedGame(Hero hero, int level) {
-        this.hero = hero;
+    public LoadedGame(Plant plant, int level) {
+        this.plant = plant;
         this.level = level;
     }
 
-    public Hero getHero() {
-        return hero;
+    public Plant getHero() {
+        return plant;
     }
 
     public int getLevel() {
