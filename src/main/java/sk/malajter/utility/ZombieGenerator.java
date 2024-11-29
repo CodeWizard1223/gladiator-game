@@ -1,15 +1,14 @@
 package sk.malajter.utility;
 
-import sk.malajter.ability.PlantAbility;
 import sk.malajter.ability.ZombieAbility;
 import sk.malajter.domain.Zombie;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class EnemyGenerator {
+public class ZombieGenerator {
 
-    public static Map<Integer, Zombie> createEnemies() {
+    public static Map<Integer, Zombie> createZombies() {
         Map<Integer, Zombie> enemies = new HashMap<>();
         enemies.put(
                 1, new Zombie("Regular Zombie", Map.of(

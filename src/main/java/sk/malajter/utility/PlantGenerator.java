@@ -14,7 +14,8 @@ public class PlantGenerator {
         plants.put(
                 1, new Plant("Peashooter", Map.of(
                         PlantAbility.PIERCING_ATTACK, 5,
-                        PlantAbility.PUSH_EFFECT, 2
+                        PlantAbility.PUSH_EFFECT, 2,
+                        PlantAbility.HEALTH, 50
                 ))
         );
 
@@ -22,7 +23,8 @@ public class PlantGenerator {
         plants.put(
                 2, new Plant("Sunflower", Map.of(
                         PlantAbility.ENERGY_PRODUCTION, 10,
-                        PlantAbility.HEALING, 3
+                        PlantAbility.HEALING, 3,
+                        PlantAbility.HEALTH, 50
                 ))
         );
 
@@ -30,7 +32,8 @@ public class PlantGenerator {
         plants.put(
                 3, new Plant("Wall-nut", Map.of(
                         PlantAbility.BLOCK, 8,
-                        PlantAbility.PUSH_EFFECT, 1
+                        PlantAbility.PUSH_EFFECT, 1,
+                        PlantAbility.HEALTH, 50
                 ))
         );
 
@@ -38,7 +41,8 @@ public class PlantGenerator {
         plants.put(
                 4, new Plant("Cherry Bomb", Map.of(
                         PlantAbility.AREA_DAMAGE, 20,
-                        PlantAbility.POISON_EFFECT, 5
+                        PlantAbility.POISON_EFFECT, 5,
+                        PlantAbility.HEALTH, 50
                 ))
         );
 
@@ -47,7 +51,8 @@ public class PlantGenerator {
                 5, new Plant("Snow Pea", Map.of(
                         PlantAbility.SLOW_EFFECT, 3,
                         PlantAbility.PIERCING_ATTACK, 6,
-                        PlantAbility.PUSH_EFFECT, 2
+                        PlantAbility.PUSH_EFFECT, 2,
+                        PlantAbility.HEALTH, 50
                 ))
         );
 
@@ -55,7 +60,8 @@ public class PlantGenerator {
         plants.put(
                 6, new Plant("Chomper", Map.of(
                         PlantAbility.POISON_EFFECT, 10,
-                        PlantAbility.AREA_DAMAGE, 7
+                        PlantAbility.AREA_DAMAGE, 7,
+                        PlantAbility.HEALTH, 50
                 ))
         );
 
@@ -63,7 +69,8 @@ public class PlantGenerator {
         plants.put(
                 7, new Plant("Potato Mine", Map.of(
                         PlantAbility.AREA_DAMAGE, 15,
-                        PlantAbility.PUSH_EFFECT, 5
+                        PlantAbility.PUSH_EFFECT, 5,
+                        PlantAbility.HEALTH, 50
                 ))
         );
 
@@ -71,7 +78,8 @@ public class PlantGenerator {
         plants.put(
                 8, new Plant("Cactus", Map.of(
                         PlantAbility.PIERCING_ATTACK, 7,
-                        PlantAbility.BLOCK, 2
+                        PlantAbility.BLOCK, 2,
+                        PlantAbility.HEALTH, 50
                 ))
         );
 
@@ -79,7 +87,8 @@ public class PlantGenerator {
         plants.put(
                 9, new Plant("Repeater", Map.of(
                         PlantAbility.PIERCING_ATTACK, 9,
-                        PlantAbility.PUSH_EFFECT, 3
+                        PlantAbility.PUSH_EFFECT, 3,
+                        PlantAbility.HEALTH, 50
                 ))
         );
 
@@ -87,7 +96,8 @@ public class PlantGenerator {
         plants.put(
                 10, new Plant("Gatling Pea", Map.of(
                         PlantAbility.PIERCING_ATTACK, 12,
-                        PlantAbility.AREA_DAMAGE, 6
+                        PlantAbility.AREA_DAMAGE, 6,
+                        PlantAbility.HEALTH, 50
                 ))
         );
         return plants;

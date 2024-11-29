@@ -5,14 +5,23 @@ import sk.malajter.ability.ZombieAbility;
 
 import java.util.Map;
 
-public class Zombie {
+public class Zombie extends GameCharacter<ZombieAbility>{
 
     private String name;
 
-    private Map<ZombieAbility, Integer> abilities;
+    private final Map<ZombieAbility, Integer> abilities;
 
     public Zombie(String name, Map<ZombieAbility, Integer> abilities) {
-        this.name = name;
+        super(name);
         this.abilities = abilities;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public Map<ZombieAbility, Integer> getAbilities() {
+        return abilities;
     }
 }
