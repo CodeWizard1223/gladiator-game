@@ -8,7 +8,5 @@ public class Main {
 
         final GameManager gameManager = new GameManager();
         gameManager.startGame();
-
-
     }
 }

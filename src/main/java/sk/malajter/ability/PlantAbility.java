@@ -10,10 +10,7 @@ public enum PlantAbility {
     BLOCK("Plants like the Wall-nut or Tall-nut have extra durability and can block multiple attacks."),
     PUSH_EFFECT("Some plants can push zombies backward (e.g., Kernel-pult’s butter stun effect)."),
     POISON_EFFECT("Deals damage over time (e.g., Doomshroom could release toxic gas)."),
-    CLONING("Some plants might spawn smaller plants or copies of themselves to overwhelm zombies."),
-    HEALTH("Temporary"),
-    LUCK("Temporary");
-
+    CLONING("Some plants might spawn smaller plants or copies of themselves to overwhelm zombies.");
 
     private final String description;
 

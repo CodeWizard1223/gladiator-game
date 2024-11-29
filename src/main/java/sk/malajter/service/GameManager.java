@@ -6,7 +6,7 @@ import sk.malajter.constant.Constants;
 import sk.malajter.domain.Zombie;
 import sk.malajter.domain.Plant;
 import sk.malajter.domain.LoadedGame;
-import sk.malajter.utility.ZombieGenerator;
+import sk.malajter.utility.EnemyGenerator;
 import sk.malajter.utility.InputUtils;
 import sk.malajter.utility.PrintUtils;
 
@@ -34,7 +34,7 @@ public class GameManager {
         this.currentLevel = Constants.INITIAL_LEVEL;
         this.fileService = new FileService();
         this.battleService = new BattleService();
-        this.enemiesByLevel = ZombieGenerator.createZombies();
+        this.enemiesByLevel = EnemyGenerator.createEnemies();
     }
 
     public void startGame() throws InterruptedException {
