@@ -1,15 +1,15 @@
 package sk.malajter.ability;
 
-import sk.malajter.domain.Plant;
+import sk.malajter.domain.Hero;
 import sk.malajter.utility.InputUtils;
 import sk.malajter.utility.PrintUtils;
 
 public class HeroAbilityManager {
 
-    private final Plant plant;
+    private final Hero hero;
 
-    public HeroAbilityManager(Plant plant) {
-        this.plant = plant;
+    public HeroAbilityManager(Hero hero) {
+        this.hero = hero;
     }
 
     public void removeHeroAvailablePoints() {
@@ -24,37 +24,37 @@ public class HeroAbilityManager {
             System.out.println("6. Health.");
 
             final int abilityIndex = InputUtils.readInt();
-            PlantAbility plantAbility;
+            Ability ability;
             switch (abilityIndex) {
                 case 0 -> {
                     return;
                 }
-                case 1 -> plantAbility = PlantAbility.ATTACK;
-                case 2 -> plantAbility = PlantAbility.DEFENCE;
-                case 3 -> plantAbility = PlantAbility.DEXTERITY;
-                case 4 -> plantAbility = PlantAbility.SKILL;
-                case 5 -> plantAbility = PlantAbility.LUCK;
-                case 6 -> plantAbility = PlantAbility.HEALTH;
+                case 1 -> ability = Ability.ATTACK;
+                case 2 -> ability = Ability.DEFENCE;
+                case 3 -> ability = Ability.DEXTERITY;
+                case 4 -> ability = Ability.SKILL;
+                case 5 -> ability = Ability.LUCK;
+                case 6 -> ability = Ability.HEALTH;
                 // Need to have default because of int variable, if the variable would be enum, we can skip the default option.
                 default -> {
                     System.out.println("Invalid ability index.");
                     continue;
                 }
             }
-            if (this.plant.getAbilities().get(plantAbility) == 1) {
+            if (this.hero.getAbilities().get(ability) == 1) {
                 System.out.println("You cannot remove points from this ability.");
             } else {
-                this.plant.updateAbility(plantAbility, -1);
-                this.plant.updateHeroAvailablePoints(1);
-                System.out.println("You have removed 1 point from " + plantAbility);
-                PrintUtils.printAbilities(this.plant);
+                this.hero.updateAbility(ability, -1);
+                this.hero.updateHeroAvailablePoints(1);
+                System.out.println("You have removed 1 point from " + ability);
+                PrintUtils.printAbilities(this.hero);
                 PrintUtils.printDivider();
             }
         }
     }
 
     public void spendHeroAvailablePoints() {
-        int availablePoints = plant.getHeroAvailablePoints();
+        int availablePoints = hero.getHeroAvailablePoints();
 
         if (availablePoints == 0) {
             System.out.println("You have no points to spend!");
@@ -72,37 +72,37 @@ public class HeroAbilityManager {
             System.out.println("6. Health.");
 
             final int abilityIndex = InputUtils.readInt();
-            PlantAbility plantAbility;
+            Ability ability;
             switch (abilityIndex) {
                 case 0 -> {
-                    for (PlantAbility a: PlantAbility.values()) {
+                    for (Ability a: Ability.values()) {
                         System.out.println(a + ": " + a.getDescription());
                     }
                     System.out.println();
                     continue;
                 }
-                case 1 -> plantAbility = PlantAbility.ATTACK;
-                case 2 -> plantAbility = PlantAbility.DEFENCE;
-                case 3 -> plantAbility = PlantAbility.DEXTERITY;
-                case 4 -> plantAbility = PlantAbility.SKILL;
-                case 5 -> plantAbility = PlantAbility.LUCK;
-                case 6 -> plantAbility = PlantAbility.HEALTH;
+                case 1 -> ability = Ability.ATTACK;
+                case 2 -> ability = Ability.DEFENCE;
+                case 3 -> ability = Ability.DEXTERITY;
+                case 4 -> ability = Ability.SKILL;
+                case 5 -> ability = Ability.LUCK;
+                case 6 -> ability = Ability.HEALTH;
                 default -> {
                     System.out.println("Invalid index.");
                     continue;
                 }
             }
-            plant.updateAbility(plantAbility, 1);
-            System.out.println("You have upgraded " + plantAbility + ".");
+            hero.updateAbility(ability, 1);
+            System.out.println("You have upgraded " + ability + ".");
 
-            plant.updateHeroAvailablePoints(-1);
+            hero.updateHeroAvailablePoints(-1);
             if (availablePoints > 1) {
-                PrintUtils.printAbilities(plant);
+                PrintUtils.printAbilities(hero);
             }
             availablePoints--;
         }
         System.out.println("You have spent all your available points. Your abilities are: ");
-        PrintUtils.printAbilities(plant);
+        PrintUtils.printAbilities(hero);
         System.out.println();
     }
 }

@@ -1,10 +1,10 @@
 package sk.malajter.service;
 
-import sk.malajter.ability.PlantAbility;
+import sk.malajter.ability.Ability;
 import sk.malajter.constant.Constants;
-import sk.malajter.domain.Zombie;
+import sk.malajter.domain.Enemy;
 import sk.malajter.domain.GameCharacter;
-import sk.malajter.domain.Plant;
+import sk.malajter.domain.Hero;
 import sk.malajter.utility.InputUtils;
 import sk.malajter.utility.PrintUtils;
 
@@ -19,26 +19,26 @@ public class BattleService {
         this.random = new Random();
     }
 
-    public boolean battle(Plant plant, Zombie zombie) throws InterruptedException {
-        final Map<PlantAbility, Integer> heroAbilities = plant.getAbilities();
-        final Map<PlantAbility, Integer> enemyAbilities = zombie.getAbilities();
+    public boolean battle(Hero hero, Enemy enemy) throws InterruptedException {
+        final Map<Ability, Integer> heroAbilities = hero.getAbilities();
+        final Map<Ability, Integer> enemyAbilities = enemy.getAbilities();
 
         System.out.println("You start the battle first!");
         PrintUtils.printDivider();
 
         boolean isHeroTurn = true;
         while (true) {
-            final int heroLife = plant.getAbilities().get(PlantAbility.HEALTH);
-            final int enemyLife = zombie.getAbilities().get(PlantAbility.HEALTH);
+            final int heroLife = hero.getAbilities().get(Ability.HEALTH);
+            final int enemyLife = enemy.getAbilities().get(Ability.HEALTH);
 
             System.out.println("Your life: " + heroLife);
             System.out.println("Enemy life: " + enemyLife);
 
             if (isHeroTurn) {
-                this.battleRound(plant, zombie);
+                this.battleRound(hero, enemy);
                 isHeroTurn = false;
             } else {
-                this.battleRound(zombie, plant);
+                this.battleRound(enemy, hero);
                 isHeroTurn = true;
             }
 
@@ -52,12 +52,12 @@ public class BattleService {
         }
     }
 
-    public boolean isHeroReadyToBattle(Plant plant, Zombie zombie) {
-        System.out.println(plant.getName() + " VS " + zombie.getName());
+    public boolean isHeroReadyToBattle(Hero hero, Enemy enemy) {
+        System.out.println(hero.getName() + " VS " + enemy.getName());
         System.out.println("View your abilities: ");
-        PrintUtils.printAbilities(plant);
+        PrintUtils.printAbilities(hero);
         System.out.println("View enemy abilities: ");
-        PrintUtils.printAbilities(zombie);
+        PrintUtils.printAbilities(enemy);
 
         System.out.println("Are you ready to fight?");
         System.out.println("0. No");
@@ -81,21 +81,21 @@ public class BattleService {
     }
 
     private void battleRound(GameCharacter attacker, GameCharacter defender) {
-        final Map<PlantAbility, Integer> attackerAbilities = attacker.getAbilities();
-        final Map<PlantAbility, Integer> defenderAbilities = defender.getAbilities();
+        final Map<Ability, Integer> attackerAbilities = attacker.getAbilities();
+        final Map<Ability, Integer> defenderAbilities = defender.getAbilities();
 
         // Calculate attack power of attacker.
-        final int minAttack = attackerAbilities.get(PlantAbility.ATTACK);
-        final int maxAttack = minAttack + attackerAbilities.get(PlantAbility.DEXTERITY) + attackerAbilities.get(PlantAbility.SKILL);
+        final int minAttack = attackerAbilities.get(Ability.ATTACK);
+        final int maxAttack = minAttack + attackerAbilities.get(Ability.DEXTERITY) + attackerAbilities.get(Ability.SKILL);
         final int attackPower = random.nextInt(maxAttack - minAttack + 1) + minAttack;
 
         // Calculate defence power of defender.
-        final int minDefence = defenderAbilities.get(PlantAbility.DEFENCE);
-        final int maxDefence = minDefence + defenderAbilities.get(PlantAbility.DEXTERITY);
+        final int minDefence = defenderAbilities.get(Ability.DEFENCE);
+        final int maxDefence = minDefence + defenderAbilities.get(Ability.DEXTERITY);
         final int defencePower = random.nextInt(maxDefence - minDefence + 1) + minDefence;
 
         // Calculate damage.
-        final boolean isCriticalHit = (random.nextInt(101) + 1) < attackerAbilities.get(PlantAbility.LUCK);
+        final boolean isCriticalHit = (random.nextInt(101) + 1) < attackerAbilities.get(Ability.LUCK);
         int damage = Math.max(0, attackPower - defencePower);
         if (isCriticalHit) {
             System.out.println("Critical Hit!");
@@ -104,7 +104,7 @@ public class BattleService {
 
         System.out.println(attacker.getName() + " attacks " + defender.getName() + " with " + damage + " damage.");
         defender.receiveDamage(damage);
-        System.out.println(defender.getName() + " has " + defenderAbilities.get(PlantAbility.HEALTH) + " health.");
+        System.out.println(defender.getName() + " has " + defenderAbilities.get(Ability.HEALTH) + " health.");
         PrintUtils.printDivider();
     }
 }
