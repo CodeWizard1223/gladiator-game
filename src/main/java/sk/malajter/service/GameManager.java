@@ -6,10 +6,13 @@ import sk.malajter.constant.Constants;
 import sk.malajter.domain.Enemy;
 import sk.malajter.domain.Hero;
 import sk.malajter.domain.LoadedGame;
+import sk.malajter.domain.Weapon;
 import sk.malajter.utility.EnemyGenerator;
 import sk.malajter.utility.InputUtils;
 import sk.malajter.utility.PrintUtils;
+import sk.malajter.utility.WeaponGenerator;
 
+import java.util.List;
 import java.util.Map;
 
 public class GameManager {
@@ -26,6 +29,8 @@ public class GameManager {
 
     private final Map<Integer, Enemy> enemiesByLevel;
 
+    private final List<Weapon> weapons;
+
     public GameManager() {
         this.hero = new Hero("");
         // An option to start game in Main is put the startGame method to constructor of GameManager:
@@ -35,6 +40,7 @@ public class GameManager {
         this.fileService = new FileService();
         this.battleService = new BattleService();
         this.enemiesByLevel = EnemyGenerator.createEnemies();
+        this.weapons = WeaponGenerator.generateWeapons();
     }
 
     public void startGame() throws InterruptedException {
@@ -59,6 +65,10 @@ public class GameManager {
                             System.out.println("You have won this battle! You have gained " + this.currentLevel + " ability points.");
                             this.hero.updateHeroAvailablePoints(this.currentLevel);
                             this.currentLevel++;
+
+                            // let choose the hero some weapon
+                            chooseWeapon();
+
                         } else {
                             System.out.println("You have lost.");
                         }
@@ -141,5 +151,47 @@ public class GameManager {
         PrintUtils.printAbilities(hero);
         PrintUtils.printDivider();
         this.heroAbilityManager.spendHeroAvailablePoints();
+    }
+
+    private void printWeapons() {
+        for (Weapon weapon : this.weapons) {
+            System.out.println(weapon.getName() + " boost your ability " + weapon.getBoost() + " times.");
+        }
+        System.out.println();
+    }
+
+    private void chooseWeapon() {
+        while (true) {
+            System.out.println("Do you want to choose some weapon?");
+            System.out.println("0. No. Go back.");
+            System.out.println("1. Description.");
+            System.out.println("2. Yes.");
+
+            final int choice = InputUtils.readInt();
+            switch (choice) {
+                case 0 -> {
+                    return;
+                }
+                case 1 -> {
+                    printWeapons();
+                }
+                case 2 -> {
+                    System.out.println("Choose weapon.");
+                    for (int i = 0; i < this.weapons.size(); i++) {
+                        System.out.println(i + ". " + this.weapons.get(i).getName());
+                    }
+                    int weapon = InputUtils.readInt();
+                    if (weapon >= 0 && weapon < this.weapons.size()) {
+                        Weapon selectedWeapon  = this.weapons.get(weapon);
+                        this.hero.boostHeroAbilityPoints(Ability.ATTACK, selectedWeapon.getBoost());
+                        System.out.println("Ability " + Ability.ATTACK + " was boosted " + selectedWeapon.getBoost() + " times.");
+                        return;
+                    } else {
+                        System.out.println("Invalid input. Choose again.");
+                    }
+                }
+                default -> System.out.println("Invalid input.");
+            }
+        }
     }
 }

@@ -3,6 +3,7 @@ package sk.malajter.utility;
 import sk.malajter.ability.Ability;
 import sk.malajter.domain.GameCharacter;
 import sk.malajter.domain.Hero;
+import sk.malajter.domain.Weapon;
 
 import java.util.Map;
 

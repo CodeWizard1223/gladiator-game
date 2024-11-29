@@ -10,6 +10,8 @@ public class Hero extends GameCharacter {
 
     private int heroAvailablePoints;
 
+    private int boost;
+
     public Hero(String name) {
         super(name, new HashMap<>());
         this.abilities = this.geInitialAbilities();
@@ -39,6 +41,10 @@ public class Hero extends GameCharacter {
 
     public void updateHeroAvailablePoints(int delta) {
         this.heroAvailablePoints += delta;
+    }
+
+    public void boostHeroAbilityPoints(Ability ability, int boost) {
+        this.abilities.put(ability, this.abilities.get(ability) * boost);
     }
 
     public void setAbility(Ability ability, int value) {
