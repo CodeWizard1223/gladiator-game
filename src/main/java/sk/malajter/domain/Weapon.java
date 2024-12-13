@@ -1,12 +1,16 @@
 package sk.malajter.domain;
 
+import sk.malajter.ability.Ability;
+
+import java.util.Map;
+
 public class Weapon {
 
-    private final String name;
+    private String name;
 
-    private int boost;
+    private Map<Ability, Integer> boost;
 
-    public Weapon(String name, int boost) {
+    public Weapon(String name, Map<Ability, Integer> boost) {
         this.name = name;
         this.boost = boost;
     }
@@ -15,7 +19,21 @@ public class Weapon {
         return name;
     }
 
-    public int getBoost() {
+    public Map<Ability, Integer> getBoost() {
         return boost;
+    }
+
+    public int getBoostValue() {
+        for (Map.Entry<Ability, Integer> entry : this.boost.entrySet()) {
+            return entry.getValue();
+        }
+        return 0;
+    }
+
+    public Ability getWeaponAbility() {
+        for (Map.Entry<Ability, Integer> entry : this.boost.entrySet()) {
+            return entry.getKey();
+        }
+        return null;
     }
 }
