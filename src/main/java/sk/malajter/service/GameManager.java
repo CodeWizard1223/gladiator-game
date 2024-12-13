@@ -29,8 +29,6 @@ public class GameManager {
 
     private final Map<Integer, Enemy> enemiesByLevel;
 
-    private final List<Weapon> weapons;
-
     public GameManager() {
         this.hero = new Hero("");
         // An option to start game in Main is put the startGame method to constructor of GameManager:
@@ -40,7 +38,6 @@ public class GameManager {
         this.fileService = new FileService();
         this.battleService = new BattleService();
         this.enemiesByLevel = EnemyGenerator.createEnemies();
-        this.weapons = WeaponGenerator.generateWeapons();
     }
 
     public void startGame() throws InterruptedException {
@@ -66,7 +63,6 @@ public class GameManager {
                             this.hero.updateHeroAvailablePoints(this.currentLevel);
                             this.currentLevel++;
 
-                            // let choose the hero some weapon
                             chooseWeapon();
 
                         } else {
@@ -113,7 +109,8 @@ public class GameManager {
 
         final int choice = InputUtils.readInt();
         switch (choice) {
-            case 0 -> {}
+            case 0 -> {
+            }
             case 1 -> this.heroAbilityManager.spendHeroAvailablePoints();
             case 2 -> this.heroAbilityManager.removeHeroAvailablePoints();
             case 3 -> System.out.println("Invalid choice.");
@@ -154,8 +151,9 @@ public class GameManager {
     }
 
     private void printWeapons() {
-        for (Weapon weapon : this.weapons) {
-            System.out.println(weapon.getName() + " boost your ability " + weapon.getBoost() + " times.");
+        List<Weapon> weaponList = WeaponGenerator.generateWeapons(this.currentLevel);
+        for (Weapon weapon : weaponList) {
+            System.out.println(weapon.getName() + " boost your ability " + weapon.getWeaponAbility() + " " + weapon.getBoostValue() + " times.");
         }
         System.out.println();
     }
@@ -165,33 +163,44 @@ public class GameManager {
             System.out.println("Do you want to choose some weapon?");
             System.out.println("0. No. Go back.");
             System.out.println("1. Description.");
-            System.out.println("2. Yes.");
+            System.out.println("2. Choose a weapon.");
 
             final int choice = InputUtils.readInt();
             switch (choice) {
                 case 0 -> {
-                    return;
+                    return; // Exit the loop
                 }
                 case 1 -> {
                     printWeapons();
                 }
                 case 2 -> {
-                    System.out.println("Choose weapon.");
-                    for (int i = 0; i < this.weapons.size(); i++) {
-                        System.out.println(i + ". " + this.weapons.get(i).getName());
-                    }
-                    int weapon = InputUtils.readInt();
-                    if (weapon >= 0 && weapon < this.weapons.size()) {
-                        Weapon selectedWeapon  = this.weapons.get(weapon);
-                        this.hero.boostHeroAbilityPoints(Ability.ATTACK, selectedWeapon.getBoost());
-                        System.out.println("Ability " + Ability.ATTACK + " was boosted " + selectedWeapon.getBoost() + " times.");
-                        return;
-                    } else {
-                        System.out.println("Invalid input. Choose again.");
-                    }
+                    selectWeapon();
+                    return;
                 }
-                default -> System.out.println("Invalid input.");
+                default -> System.out.println("Invalid input. Please try again.");
             }
         }
     }
+
+
+    private void selectWeapon() {
+        List<Weapon> weaponList = WeaponGenerator.generateWeapons(this.currentLevel);
+        System.out.println("Available weapons:");
+        for (int i = 0; i < weaponList.size(); i++) {
+            System.out.println(i + ". " + weaponList.get(i).getName());
+        }
+
+        System.out.println("Enter your choice: ");
+        int choice = InputUtils.readInt();
+        if (choice >= 0 && choice < weaponList.size()) {
+            Weapon selectedWeapon = weaponList.get(choice);
+            this.hero.boostHeroAbilityPoints(selectedWeapon);
+            System.out.println("Ability " + selectedWeapon.getWeaponAbility() +
+                    " was boosted " + selectedWeapon.getBoostValue() + " times.");
+            PrintUtils.printAbilities(this.hero);
+        } else {
+            System.out.println("Invalid input. Please try again.");
+        }
+    }
 }
+
