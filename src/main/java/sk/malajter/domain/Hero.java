@@ -10,11 +10,9 @@ public class Hero extends GameCharacter {
 
     private int heroAvailablePoints;
 
-    private int boost;
-
     public Hero(String name) {
         super(name, new HashMap<>());
-        this.abilities = this.geInitialAbilities();
+        this.abilities = this.getInitialAbilities();
         this.heroAvailablePoints = Constants.INITIAL_ABILITY_POINTS;
     }
 
@@ -43,8 +41,10 @@ public class Hero extends GameCharacter {
         this.heroAvailablePoints += delta;
     }
 
-    public void boostHeroAbilityPoints(Ability ability, int boost) {
-        this.abilities.put(ability, this.abilities.get(ability) * boost);
+    public void boostHeroAbilityPoints(Weapon weapon) {
+        if (this.abilities.containsKey(weapon.getWeaponAbility())) {
+            this.abilities.put(weapon.getWeaponAbility(), this.getValueOfAbilities() * weapon.getBoostValue());
+        }
     }
 
     public void setAbility(Ability ability, int value) {
@@ -52,7 +52,7 @@ public class Hero extends GameCharacter {
     }
 
     // Method for creating hashMap of Abilities and their values.
-    private Map<Ability, Integer> geInitialAbilities() {
+    private Map<Ability, Integer> getInitialAbilities() {
         return new HashMap<>(Map.of(
               Ability.ATTACK, 1,
               Ability.DEFENCE, 1,
@@ -61,5 +61,12 @@ public class Hero extends GameCharacter {
                 Ability.LUCK, 1,
                 Ability.HEALTH, 50
         ));
+    }
+
+    private int getValueOfAbilities() {
+        for (Map.Entry<Ability, Integer> entry: this.abilities.entrySet()) {
+            return entry.getValue();
+        }
+        return 0;
     }
 }
