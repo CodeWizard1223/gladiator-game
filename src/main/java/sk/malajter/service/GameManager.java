@@ -12,8 +12,7 @@ import sk.malajter.utility.InputUtils;
 import sk.malajter.utility.PrintUtils;
 import sk.malajter.utility.WeaponGenerator;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GameManager {
 
@@ -150,12 +149,16 @@ public class GameManager {
         this.heroAbilityManager.spendHeroAvailablePoints();
     }
 
-    private void printWeapons() {
+    private void printWeaponDetails() {
         List<Weapon> weaponList = WeaponGenerator.generateWeapons(this.currentLevel);
         for (Weapon weapon : weaponList) {
-            System.out.println(weapon.getName() + " boost your ability " + weapon.getWeaponAbility() + " " + weapon.getBoostValue() + " times.");
+            Map<Ability, Integer> boost = weapon.getBoost();
+            System.out.println(weapon.getName() + " boost your ability: ");
+            boost.forEach((ability, boostValue) -> {
+                System.out.println(ability + ": " + boostValue + " times.");
+            });
+            System.out.println();
         }
-        System.out.println();
     }
 
     private void chooseWeapon() {
@@ -168,10 +171,10 @@ public class GameManager {
             final int choice = InputUtils.readInt();
             switch (choice) {
                 case 0 -> {
-                    return; // Exit the loop
+                    return;
                 }
                 case 1 -> {
-                    printWeapons();
+                    printWeaponDetails();
                 }
                 case 2 -> {
                     selectWeapon();
@@ -181,7 +184,6 @@ public class GameManager {
             }
         }
     }
-
 
     private void selectWeapon() {
         List<Weapon> weaponList = WeaponGenerator.generateWeapons(this.currentLevel);
@@ -194,12 +196,25 @@ public class GameManager {
         int choice = InputUtils.readInt();
         if (choice >= 0 && choice < weaponList.size()) {
             Weapon selectedWeapon = weaponList.get(choice);
-            this.hero.boostHeroAbilityPoints(selectedWeapon);
-            System.out.println("Ability " + selectedWeapon.getWeaponAbility() +
-                    " was boosted " + selectedWeapon.getBoostValue() + " times.");
+            this.applyWeaponBoost(selectedWeapon);
+            Map<Ability, Integer> boost = selectedWeapon.getBoost();
+            System.out.println("Boosted abilities:");
+            boost.forEach((ability, boostValue) -> {
+                System.out.println(ability + ": " + boostValue + " times.");
+            });
             PrintUtils.printAbilities(this.hero);
         } else {
             System.out.println("Invalid input. Please try again.");
+        }
+    }
+
+    private void applyWeaponBoost(Weapon weapon) {
+        Map<Ability, Integer> weaponAbilities = weapon.getBoost();
+        Map<Ability, Integer> heroAbilities = this.hero.getAbilities();
+        for (Map.Entry<Ability, Integer> entry : weaponAbilities.entrySet()) {
+            Ability ability = entry.getKey();
+            int boostValue = entry.getValue();
+            heroAbilities.put(ability, heroAbilities.getOrDefault(ability, 0) + boostValue);
         }
     }
 }

@@ -16,7 +16,7 @@ public class WeaponGenerator {
             weapons.add(new Weapon("Iron Sword", Map.of(Ability.ATTACK, 5)));
             weapons.add(new Weapon("Wooden Shield", Map.of(Ability.DEFENCE, 3)));
             weapons.add(new Weapon("Leather Boots", Map.of(Ability.DEXTERITY, 2)));
-            weapons.add(new Weapon("Healing Herb", Map.of(Ability.LUCK, 10)));
+            weapons.add(new Weapon("Healing Herb", Map.of(Ability.HEALTH, 10))); // HEALTH!!!
         }
 
         // Weapons unlocked for level 3
@@ -32,7 +32,7 @@ public class WeaponGenerator {
         if (level >= 5) {
             weapons.clear();
             weapons.add(new Weapon("Mystic Staff", Map.of(Ability.SKILL, 6, Ability.ATTACK, 4)));
-            weapons.add(new Weapon("Blessed Shield", Map.of(Ability.DEFENCE, 8, Ability.LUCK, 10)));
+            weapons.add(new Weapon("Blessed Shield", Map.of(Ability.DEFENCE, 8, Ability.HEALTH, 10)));
             weapons.add(new Weapon("Shadow Cloak", Map.of(Ability.DEXTERITY, 5, Ability.SKILL, 4)));
             weapons.add(new Weapon("Dual Daggers", Map.of(Ability.ATTACK, 10, Ability.DEXTERITY, 3)));
         }

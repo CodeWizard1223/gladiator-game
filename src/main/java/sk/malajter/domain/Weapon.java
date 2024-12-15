@@ -22,18 +22,4 @@ public class Weapon {
     public Map<Ability, Integer> getBoost() {
         return boost;
     }
-
-    public int getBoostValue() {
-        for (Map.Entry<Ability, Integer> entry : this.boost.entrySet()) {
-            return entry.getValue();
-        }
-        return 0;
-    }
-
-    public Ability getWeaponAbility() {
-        for (Map.Entry<Ability, Integer> entry : this.boost.entrySet()) {
-            return entry.getKey();
-        }
-        return null;
-    }
 }

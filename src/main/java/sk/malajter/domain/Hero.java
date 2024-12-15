@@ -5,6 +5,7 @@ import sk.malajter.constant.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Hero extends GameCharacter {
 
@@ -41,10 +42,8 @@ public class Hero extends GameCharacter {
         this.heroAvailablePoints += delta;
     }
 
-    public void boostHeroAbilityPoints(Weapon weapon) {
-        if (this.abilities.containsKey(weapon.getWeaponAbility())) {
-            this.abilities.put(weapon.getWeaponAbility(), this.getValueOfAbilities() * weapon.getBoostValue());
-        }
+    private int calculateBoostedValue(int boostValue) {
+        return boostValue * boostValue;
     }
 
     public void setAbility(Ability ability, int value) {
@@ -61,12 +60,5 @@ public class Hero extends GameCharacter {
                 Ability.LUCK, 1,
                 Ability.HEALTH, 50
         ));
-    }
-
-    private int getValueOfAbilities() {
-        for (Map.Entry<Ability, Integer> entry: this.abilities.entrySet()) {
-            return entry.getValue();
-        }
-        return 0;
     }
 }
