@@ -26,4 +26,8 @@ public abstract class GameCharacter {
     public void receiveDamage(int damage) {
         abilities.put(Ability.HEALTH, Math.max(0, abilities.get(Ability.HEALTH) - damage));
     }
+
+    //if (character.getAbilities().get(Ability.LEVEL) < requiredLevel) {
+    //    System.out.println("You cannot enter this location.");
+    //}
 }

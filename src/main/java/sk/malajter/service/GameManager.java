@@ -154,13 +154,13 @@ public class GameManager {
         for (Weapon weapon : weaponList) {
             Map<Ability, Integer> boost = weapon.getBoost();
             System.out.println(weapon.getName() + " boost your ability: ");
-            boost.forEach((ability, boostValue) -> {
-                System.out.println(ability + ": " + boostValue + " times.");
-            });
+            boost.forEach((ability, boostValue) ->
+                System.out.println(ability + ": " + boostValue + " times."));
             System.out.println();
         }
     }
 
+    // fix the description
     private void chooseWeapon() {
         while (true) {
             System.out.println("Do you want to choose some weapon?");
