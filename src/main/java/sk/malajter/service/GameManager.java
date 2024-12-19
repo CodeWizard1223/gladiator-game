@@ -7,9 +7,12 @@ import sk.malajter.domain.Enemy;
 import sk.malajter.domain.Hero;
 import sk.malajter.domain.LoadedGame;
 import sk.malajter.domain.Weapon;
+import sk.malajter.world.location.Location;
+import sk.malajter.world.region.Region;
 import sk.malajter.utility.EnemyGenerator;
 import sk.malajter.utility.InputUtils;
 import sk.malajter.utility.PrintUtils;
+
 import sk.malajter.utility.WeaponGenerator;
 
 import java.util.*;
@@ -28,6 +31,12 @@ public class GameManager {
 
     private final Map<Integer, Enemy> enemiesByLevel;
 
+    private final RegionService regionService;
+
+    private Region currentRegion;
+
+    private int difficulty;
+
     public GameManager() {
         this.hero = new Hero("");
         // An option to start game in Main is put the startGame method to constructor of GameManager:
@@ -37,82 +46,38 @@ public class GameManager {
         this.fileService = new FileService();
         this.battleService = new BattleService();
         this.enemiesByLevel = EnemyGenerator.createEnemies();
+        this.regionService = new RegionService();
+        this.difficulty = Constants.DIFFICULTY_LEVEL;
     }
 
     public void startGame() throws InterruptedException {
         this.initGame();
+        this.setInitialRegion();
 
-        while (this.currentLevel <= this.enemiesByLevel.size()) {
-            final Enemy enemy = this.enemiesByLevel.get(this.currentLevel);
-            System.out.println("0. Fight " + enemy.getName() + " (Level " + this.currentLevel + ")");
-            System.out.println("1. Upgrade abilities (" + hero.getHeroAvailablePoints() + " points to spend.)");
-            System.out.println("2. Save game.");
-            System.out.println("3. Exit game.");
+        // FIX!!!
+        while (true) {
+            boolean heroProgressed = false;
+            for (Location location : this.currentRegion.getLocations().values()) {
+                enterLocation(location);
 
-            final int choice = InputUtils.readInt();
-            switch (choice) {
-                case 0 -> {
-                    if (this.battleService.isHeroReadyToBattle(this.hero, enemy)) {
-                        final int heroHealthBeforeBattle = this.hero.getAbilities().get(Ability.HEALTH);
-
-                        final boolean hasHeroWon = this.battleService.battle(this.hero, enemy);
-                        if (hasHeroWon) {
-                            PrintUtils.printDivider();
-                            System.out.println("You have won this battle! You have gained " + this.currentLevel + " ability points.");
-                            this.hero.updateHeroAvailablePoints(this.currentLevel);
-                            this.currentLevel++;
-
-                            chooseWeapon();
-
-                        } else {
-                            System.out.println("You have lost.");
-                        }
-
-                        // restore health
-                        this.hero.setAbility(Ability.HEALTH, heroHealthBeforeBattle);
-                        System.out.println("You have full health now.");
-                        PrintUtils.printDivider();
-                    }
+                if (!isHeroEligibleForLocation()) {
+                    printLocationEligibilityMessage();
+                    break;
                 }
-                case 1 -> {
-                    this.upgradeAbilities();
+
+                Enemy enemy = this.enemiesByLevel.get(this.currentLevel);
+                handleUserActions(enemy);
+                heroProgressed = true;
+
+                if (this.hero.isInventoryFull(Constants.INVENTORY_CAPACITY)) {
+                    handleInventoryFull();
+                    return;
                 }
-                case 2 -> {
-                    this.fileService.saveGame(this.hero, this.currentLevel);
-                }
-                case 3 -> {
-                    System.out.println("Are you sure?");
-                    System.out.println("0. No");
-                    System.out.println("1. Yes");
-                    final int exitChoice = InputUtils.readInt();
-                    if (exitChoice == 1) {
-                        System.out.println("Bye!");
-                        return;
-                    }
-                    System.out.println("Continuing....");
-                    PrintUtils.printDivider();
-                }
-                default -> System.out.println("Invalid input.");
             }
-        }
-        System.out.println("Congratulation! You won the game.");
-    }
-
-    private void upgradeAbilities() {
-        System.out.println("Your abilities are:");
-        PrintUtils.printAbilities(this.hero);
-
-        System.out.println("0. Go back.");
-        System.out.println("1. Spend points. (" + hero.getHeroAvailablePoints() + " points to spend.)");
-        System.out.println("2. Remove points.");
-
-        final int choice = InputUtils.readInt();
-        switch (choice) {
-            case 0 -> {
+            if (!heroProgressed) {
+                System.out.println("Congratulations! You have completed the game!");
+                break; // Exit the while loop
             }
-            case 1 -> this.heroAbilityManager.spendHeroAvailablePoints();
-            case 2 -> this.heroAbilityManager.removeHeroAvailablePoints();
-            case 3 -> System.out.println("Invalid choice.");
         }
     }
 
@@ -149,19 +114,135 @@ public class GameManager {
         this.heroAbilityManager.spendHeroAvailablePoints();
     }
 
+    private void setInitialRegion() {
+        this.currentRegion = this.regionService.getRegionList().get(difficulty);
+        System.out.println("The game start in region " + this.currentRegion.getName() + ".");
+        System.out.println(this.currentRegion.getDescription());
+        PrintUtils.printDivider();
+    }
+
+    private void enterLocation(Location location) {
+        System.out.println("Entering location: " + location.getName());
+        System.out.println(location.getDescription());
+    }
+
+    private boolean isHeroEligibleForLocation() {
+        return hero.getAbilities().get(Ability.SKILL) > this.currentLevel;
+    }
+
+    private void printLocationEligibilityMessage() {
+        System.out.println("You are not ready for this location.");
+        System.out.println("Try upgrading abilities or choosing better weapons.");
+    }
+
+    private void handleUserActions(Enemy enemy) throws InterruptedException {
+        System.out.println("0. Fight " + enemy.getName() + " (Level " + this.currentLevel + ")");
+        System.out.println("1. Upgrade abilities.");
+        System.out.println("2. Save game.");
+        System.out.println("3. Exit game.");
+
+        int choice = InputUtils.readInt();
+        switch (choice) {
+            case 0 -> handleBattle(enemy);
+            case 1 -> upgradeAbilities();
+            case 2 -> fileService.saveGame(hero, currentLevel);
+            case 3 -> exitGame();
+            default -> System.out.println("Invalid input.");
+        }
+    }
+
+    private void upgradeAbilities() {
+        System.out.println("Your abilities are:");
+        PrintUtils.printAbilities(this.hero);
+
+        System.out.println("0. Go back.");
+        System.out.println("1. Spend points. (" + hero.getHeroAvailablePoints() + " points to spend.)");
+        System.out.println("2. Remove points.");
+
+        final int choice = InputUtils.readInt();
+        switch (choice) {
+            case 0 -> {
+            }
+            case 1 -> this.heroAbilityManager.spendHeroAvailablePoints();
+            case 2 -> this.heroAbilityManager.removeHeroAvailablePoints();
+            case 3 -> System.out.println("Invalid choice.");
+        }
+    }
+
+    private void handleBattle(Enemy enemy) throws InterruptedException {
+        if (this.battleService.isHeroReadyToBattle(this.hero, enemy)) {
+            int heroHealthBeforeBattle = this.hero.getAbilities().get(Ability.HEALTH);
+
+            if (this.battleService.battle(this.hero, enemy)) {
+                System.out.println("You have won the battle! Gained " + currentLevel + " ability points.");
+                this.hero.updateHeroAvailablePoints(currentLevel);
+                this.currentLevel++;
+                handleWeaponChoice();
+            } else {
+                System.out.println("You have lost this battle.");
+            }
+
+            this.hero.setAbility(Ability.HEALTH, heroHealthBeforeBattle);
+            System.out.println("Your health has been restored.");
+            PrintUtils.printDivider();
+        }
+    }
+
+    private void handleWeaponChoice() {
+        while (true) {
+            System.out.println("Do you want to choose a weapon?");
+            System.out.println("0. No. Go back.");
+            System.out.println("1. View weapon details.");
+            System.out.println("2. Choose a weapon.");
+
+            int choice = InputUtils.readInt();
+            switch (choice) {
+                case 0 -> {
+                    return;
+                }
+                case 1 -> printWeaponDetails();
+                case 2 -> {
+                    handleWeaponSelection();
+                    return;
+                }
+                default -> System.out.println("Invalid input.");
+            }
+        }
+    }
+
+    private void handleInventoryFull() {
+        this.difficulty++;
+        this.unlockNextRegion();
+        System.out.println("Inventory full! You've unlocked the next region.");
+    }
+
+    private void exitGame() {
+        System.out.println("Are you sure?");
+        System.out.println("0. No");
+        System.out.println("1. Yes");
+        int exitChoice = InputUtils.readInt();
+
+        if (exitChoice == 1) {
+            System.out.println("Bye!");
+            System.exit(0);
+        } else {
+            System.out.println("Continuing...");
+            PrintUtils.printDivider();
+        }
+    }
+
     private void printWeaponDetails() {
         List<Weapon> weaponList = WeaponGenerator.generateWeapons(this.currentLevel);
         for (Weapon weapon : weaponList) {
             Map<Ability, Integer> boost = weapon.getBoost();
             System.out.println(weapon.getName() + " boost your ability: ");
             boost.forEach((ability, boostValue) ->
-                System.out.println(ability + ": " + boostValue + " times."));
+                    System.out.println(ability + ": " + boostValue + " times."));
             System.out.println();
         }
     }
 
-    // fix the description
-    private void chooseWeapon() {
+    private void handleWeaponSelection() {
         while (true) {
             System.out.println("Do you want to choose some weapon?");
             System.out.println("0. No. Go back.");
@@ -217,5 +298,22 @@ public class GameManager {
             heroAbilities.put(ability, heroAbilities.getOrDefault(ability, 0) + boostValue);
         }
     }
+
+    private void unlockNextRegion() {
+        System.out.println("Congratulation! You have completed region " + this.currentRegion.getName() + ".");
+        int nextDifficulty = this.difficulty + 1;
+
+        Region nextRegion = this.regionService.getRegionList().get(nextDifficulty);
+        if (nextRegion != null) {
+            System.out.println("You have unlocked the new region: " + nextRegion.getName() + ".");
+        } else {
+            System.out.println("You have reached the end of the game.");
+            System.exit(0);
+        }
+    }
 }
+
+
+
+
 

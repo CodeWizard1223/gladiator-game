@@ -11,4 +11,8 @@ public class Constants {
     public static final int CRITICAL_HIT_MULTIPLIER = 2;
 
     public static final int BATTLE_DELAY_MILLIS = 500;
+
+    public static final int DIFFICULTY_LEVEL = 0;
+
+    public static final int INVENTORY_CAPACITY = 5;
 }

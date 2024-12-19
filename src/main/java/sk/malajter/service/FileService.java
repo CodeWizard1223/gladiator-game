@@ -61,7 +61,7 @@ public class FileService {
             final int value = Integer.parseInt(abilityData[1]);
             abilities.put(ability, value);
         }
-        return new LoadedGame(new Hero(heroName, abilities, heroAvailablePoints), currentLevel);
+        return new LoadedGame(new Hero(heroName, abilities, heroAvailablePoints), currentLevel, loadGame().getLocation()); //!!!
     }
 
     public void saveGame(Hero hero, int currentLevel) {

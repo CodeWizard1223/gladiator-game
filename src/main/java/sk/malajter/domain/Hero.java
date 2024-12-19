@@ -2,19 +2,22 @@ package sk.malajter.domain;
 
 import sk.malajter.ability.Ability;
 import sk.malajter.constant.Constants;
+import sk.malajter.item.Item;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Hero extends GameCharacter {
 
     private int heroAvailablePoints;
 
+    private List<Item> inventory;
+
     public Hero(String name) {
         super(name, new HashMap<>());
         this.abilities = this.getInitialAbilities();
         this.heroAvailablePoints = Constants.INITIAL_ABILITY_POINTS;
+        // Initialize inventory
+        this.inventory = new ArrayList<>();
     }
 
     public Hero(String name, Map<Ability, Integer> abilities, int heroAvailablePoints) {
@@ -60,5 +63,16 @@ public class Hero extends GameCharacter {
                 Ability.LUCK, 1,
                 Ability.HEALTH, 50
         ));
+    }
+
+    // Add item to inventory
+    public void addItem(Item item) {
+        inventory.add(item);
+        System.out.println("You collected: " + item.getName());
+    }
+
+    // Check if inventory is full (adjust based on region completion criteria)
+    public boolean isInventoryFull(int requiredItems) {
+        return inventory.size() >= requiredItems;
     }
 }
