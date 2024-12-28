@@ -54,7 +54,6 @@ public class GameManager {
         this.initGame();
         this.setInitialRegion();
 
-        // FIX!!!
         while (true) {
             boolean heroProgressed = false;
             for (Location location : this.currentRegion.getLocations().values()) {
@@ -127,7 +126,7 @@ public class GameManager {
     }
 
     private boolean isHeroEligibleForLocation() {
-        return hero.getAbilities().get(Ability.SKILL) > this.currentLevel;
+        return hero.getAbilities().get(Ability.SKILL) >= this.currentLevel;
     }
 
     private void printLocationEligibilityMessage() {
@@ -151,24 +150,6 @@ public class GameManager {
         }
     }
 
-    private void upgradeAbilities() {
-        System.out.println("Your abilities are:");
-        PrintUtils.printAbilities(this.hero);
-
-        System.out.println("0. Go back.");
-        System.out.println("1. Spend points. (" + hero.getHeroAvailablePoints() + " points to spend.)");
-        System.out.println("2. Remove points.");
-
-        final int choice = InputUtils.readInt();
-        switch (choice) {
-            case 0 -> {
-            }
-            case 1 -> this.heroAbilityManager.spendHeroAvailablePoints();
-            case 2 -> this.heroAbilityManager.removeHeroAvailablePoints();
-            case 3 -> System.out.println("Invalid choice.");
-        }
-    }
-
     private void handleBattle(Enemy enemy) throws InterruptedException {
         if (this.battleService.isHeroReadyToBattle(this.hero, enemy)) {
             int heroHealthBeforeBattle = this.hero.getAbilities().get(Ability.HEALTH);
@@ -176,13 +157,14 @@ public class GameManager {
             if (this.battleService.battle(this.hero, enemy)) {
                 System.out.println("You have won the battle! Gained " + currentLevel + " ability points.");
                 this.hero.updateHeroAvailablePoints(currentLevel);
+                this.handleWeaponChoice();
                 this.currentLevel++;
-                handleWeaponChoice();
             } else {
                 System.out.println("You have lost this battle.");
             }
 
             this.hero.setAbility(Ability.HEALTH, heroHealthBeforeBattle);
+            this.hero.setAbility(Ability.SKILL, currentLevel);
             System.out.println("Your health has been restored.");
             PrintUtils.printDivider();
         }
@@ -205,29 +187,9 @@ public class GameManager {
                     handleWeaponSelection();
                     return;
                 }
+
                 default -> System.out.println("Invalid input.");
             }
-        }
-    }
-
-    private void handleInventoryFull() {
-        this.difficulty++;
-        this.unlockNextRegion();
-        System.out.println("Inventory full! You've unlocked the next region.");
-    }
-
-    private void exitGame() {
-        System.out.println("Are you sure?");
-        System.out.println("0. No");
-        System.out.println("1. Yes");
-        int exitChoice = InputUtils.readInt();
-
-        if (exitChoice == 1) {
-            System.out.println("Bye!");
-            System.exit(0);
-        } else {
-            System.out.println("Continuing...");
-            PrintUtils.printDivider();
         }
     }
 
@@ -243,30 +205,6 @@ public class GameManager {
     }
 
     private void handleWeaponSelection() {
-        while (true) {
-            System.out.println("Do you want to choose some weapon?");
-            System.out.println("0. No. Go back.");
-            System.out.println("1. Description.");
-            System.out.println("2. Choose a weapon.");
-
-            final int choice = InputUtils.readInt();
-            switch (choice) {
-                case 0 -> {
-                    return;
-                }
-                case 1 -> {
-                    printWeaponDetails();
-                }
-                case 2 -> {
-                    selectWeapon();
-                    return;
-                }
-                default -> System.out.println("Invalid input. Please try again.");
-            }
-        }
-    }
-
-    private void selectWeapon() {
         List<Weapon> weaponList = WeaponGenerator.generateWeapons(this.currentLevel);
         System.out.println("Available weapons:");
         for (int i = 0; i < weaponList.size(); i++) {
@@ -296,6 +234,45 @@ public class GameManager {
             Ability ability = entry.getKey();
             int boostValue = entry.getValue();
             heroAbilities.put(ability, heroAbilities.getOrDefault(ability, 0) + boostValue);
+        }
+    }
+
+    private void handleInventoryFull() {
+        this.difficulty++;
+        this.unlockNextRegion();
+        System.out.println("Inventory full! You've unlocked the next region.");
+    }
+
+    private void upgradeAbilities() {
+        System.out.println("Your abilities are:");
+        PrintUtils.printAbilities(this.hero);
+
+        System.out.println("0. Go back.");
+        System.out.println("1. Spend points. (" + hero.getHeroAvailablePoints() + " points to spend.)");
+        System.out.println("2. Remove points.");
+
+        final int choice = InputUtils.readInt();
+        switch (choice) {
+            case 0 -> {
+            }
+            case 1 -> this.heroAbilityManager.spendHeroAvailablePoints();
+            case 2 -> this.heroAbilityManager.removeHeroAvailablePoints();
+            case 3 -> System.out.println("Invalid choice.");
+        }
+    }
+
+    private void exitGame() {
+        System.out.println("Are you sure?");
+        System.out.println("0. No");
+        System.out.println("1. Yes");
+        int exitChoice = InputUtils.readInt();
+
+        if (exitChoice == 1) {
+            System.out.println("Bye!");
+            System.exit(0);
+        } else {
+            System.out.println("Continuing...");
+            PrintUtils.printDivider();
         }
     }
 

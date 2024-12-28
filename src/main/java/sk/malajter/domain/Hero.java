@@ -59,7 +59,7 @@ public class Hero extends GameCharacter {
               Ability.ATTACK, 1,
               Ability.DEFENCE, 1,
                 Ability.DEXTERITY, 1,
-                Ability.SKILL, 1,
+                Ability.SKILL, 2,
                 Ability.LUCK, 1,
                 Ability.HEALTH, 50
         ));

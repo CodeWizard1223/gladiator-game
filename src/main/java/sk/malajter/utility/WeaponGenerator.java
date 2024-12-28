@@ -12,7 +12,7 @@ public class WeaponGenerator {
         List<Weapon> weapons = new ArrayList<>();
 
         // Weapons unlocked for level 1
-        if (level > 1) {
+        if (level >= 1) {
             weapons.add(new Weapon("Iron Sword", Map.of(Ability.ATTACK, 5)));
             weapons.add(new Weapon("Wooden Shield", Map.of(Ability.DEFENCE, 3)));
             weapons.add(new Weapon("Leather Boots", Map.of(Ability.DEXTERITY, 2)));
